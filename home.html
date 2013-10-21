@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=320"/>
+        <link rel="stylesheet" type="text/css" href="assets/MyFontsWebfontsKit.css">
+        <style>
+            * { 
+                margin:0; 
+                padding:0; 
+            }
+            body {
+                background-color: #fff;
+                font-family: SoinSansPro-Light;
+            }
+            .homeheader {
+                width: 320;
+                height: 108px;
+                background-color: #393E44;
+                text-align: center;
+            }
+            #headertoplabel {
+                color: #8b8f93;
+                font-size: 18px;
+                padding-top: 28px;
+                margin-bottom: -12px;
+            }
+            #calendarimg {
+                background: url("assets/calendar@2x.png");
+                display: inline;
+                padding-right: 32px;
+                padding-top: 10px;
+                width: 22px;
+                height: 22px;
+                -webkit-background-size: 22px 22px;
+                background-repeat: no-repeat;
+            }
+
+            #headerdaysdiv {
+                font-family: SoinSansPro-Medium;
+                display: inline;
+                color: #15a3d7;
+                font-size: 28px;
+            }
+            #myCanvas {
+                margin-top:60px;
+            }
+        </style>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script>
+            function getUserID() {
+                var qs = (function(a) {
+                    if (a == "") return {};
+                    var b = {};
+                    for (var i = 0; i < a.length; ++i) {
+                        var p=a[i].split('=');
+                        if (p.length != 2) continue;
+                        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+                    }
+                    return b;
+                })(window.location.search.substr(1).split('&'));
+                return qs["id"];
+            }
+
+            function drawHome(data) {
+                //if onWai is bigger than contactsCount, it gets weird.  could that ever happen?
+                var contactsCount = data["contacts"];
+                var onWaiCount = data["users"];
+                var can = document.getElementById("myCanvas");
+                var ctx = can.getContext("2d");
+                var width = 320;
+                var height = 179;
+                var devicePixelRatio = window.devicePixelRatio;
+                var backingStoreRatio = ctx.webkitBackingStorePixelRatio;
+                var ratio = devicePixelRatio / backingStoreRatio;
+
+                // upscale the canvas if the two ratios don't match
+                if (devicePixelRatio !== backingStoreRatio) {
+                    var oldWidth = can.width;
+                    var oldHeight = can.height;
+                    can.width = oldWidth * ratio;
+                    can.height = oldHeight * ratio;
+                    can.style.width = oldWidth + 'px';
+                    can.style.height = oldHeight + 'px';
+                    ctx.scale(ratio, ratio);
+                }
+
+                //contacts circle
+                var contactsRadius = 58;
+                var padding = 52;
+                var contactsCircleCenterX = contactsRadius + padding;
+                var contactsCircleCenterY = contactsRadius;
+                ctx.fillStyle = "#393E44";
+                ctx.arc(contactsCircleCenterX, contactsCircleCenterY, contactsRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.closePath();
+
+                //contacts line
+                ctx.fillRect(contactsCircleCenterX, contactsCircleCenterY + 6, width - contactsCircleCenterX - padding, 2);
+
+                //on circle
+                ctx.beginPath();
+                var ratio = onWaiCount / contactsCount;
+                var onRadius =  contactsRadius * ratio;
+                var offset = 30 - (30 * ratio);
+                var onCircleCenterY = contactsCircleCenterY + offset;
+                ctx.fillStyle = "#15a3d7";
+                ctx.arc(contactsCircleCenterX, onCircleCenterY, onRadius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.closePath();
+
+                //on line
+                if (onWaiCount === 0) {
+                    ctx.fillRect(contactsCircleCenterX - 1, contactsCircleCenterY + contactsRadius, 2, 62);
+                }
+                else {
+                    ctx.fillRect(contactsCircleCenterX - 1, onCircleCenterY + onRadius - 1, 2, 60 + (contactsRadius - offset) + 1);
+                }
+
+                //contactsNum
+                var contactsNumX = contactsCircleCenterX + contactsRadius + 14;
+                ctx.textAlign = "left";
+                ctx.textBaseline = "bottom";
+                ctx.font = "42px SoinSansPro-Medium";
+                ctx.fillStyle = "#393E44";
+                ctx.fillText(contactsCount, contactsNumX, contactsCircleCenterY + 14);
+
+                //CONTACTS
+                ctx.font = "16px SoinSansPro-Roman";
+                var contactsText = "CONTACTS";
+                if (contactsCount === 1) {
+                    contactsText = "CONTACT";
+                }
+                ctx.fillText(contactsText, contactsNumX, contactsCircleCenterY + 31);
+
+                //onNum
+                ctx.font = "42px SoinSansPro-Medium";
+                ctx.fillStyle = "#15a3d7";
+                ctx.fillText(onWaiCount, contactsCircleCenterX + 8, height - 3);
+
+                //ON WAI
+                ctx.font = "16px SoinSansPro-Roman";
+                ctx.fillText("ON WAI", contactsCircleCenterX + 8, height + 5);
+            }
+
+            function populateView(data) {
+                var nextWai = data["nextWai"];
+                    if (nextWai === 1) {
+                        $("#headerdaysdiv").text(nextWai + " DAY");
+                    } else { 
+                        $("#headerdaysdiv").text(nextWai + " DAYS");
+                    }
+                    drawHome(data);
+                    $("#contactsinfo").fadeIn(200)
+            }
+
+            function updateView() {
+                var userID = getUserID();
+                if (!userID) {
+                    return nil;
+                }
+
+                var testing = false;
+                if (testing === true) {
+                    var data = {"nextWai":3,"contacts":10,"users":4};
+                    populateView(data);
+                }
+                else {
+                    var getstring = '/rest/user/' + userID + '/home/stats';
+                    $.getJSON(getstring, function(data) {
+                    }).done(function(data, textStatus, jqXHR) {
+                        populateView(data);
+                    });
+                }
+            }
+
+            $(document).ready(function() {
+                $("#contactsinfo").fadeOut(0);
+            });
+
+        </script>
+    </head>
+    <body>
+        <div id="contactsinfo">
+            <div class="homeheader">
+                <div id="headertoplabel">WE'LL BE CALLING YOU IN</div><br>
+                <div id="calendarimg"></div><div id="headerdaysdiv"># DAYS</div>
+            </div>
+            <canvas id="myCanvas" height="179" width="320"></canvas>
+        </div>
+    </body>
+</html>

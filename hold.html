@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=320"/>
+        <link rel="stylesheet" type="text/css" href="assets/MyFontsWebfontsKit.css">\
+        <style>
+            * { 
+                margin:0; 
+                padding:0; 
+            }
+            html, body { 
+                height: 100%; 
+            }
+            body {
+                background-color: #393E44;
+                font-family: SoinSansPro-Light;
+            }
+            #wrap { 
+                min-height: 100%; 
+            }
+            #main { 
+                overflow:auto;
+                padding-bottom: 130px;
+            } 
+            #headerdiv {
+                height: 24px;
+                width: 240px;
+                margin-top: 12px;
+                margin-left: 12px;
+                padding-left: 12px;
+                padding-top:8px;
+                font-size: 16px;
+                color: #adafb0;
+                background-color: #4a5057;
+            }
+            #fadingcontainerview {
+                /*background-color: green;*/
+                height:280px;
+            }
+            #image {
+                padding-top: 150px;
+                background: url("assets/face@2x.png") no-repeat center;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50px;
+                height: 50px;
+                -webkit-background-size: 50px 50px;
+            }
+            #textlabel {
+                color: #adafb0;
+                margin-top: -50px;
+                font-size: 33px;
+                text-align: center;
+            }
+            #datalabel {
+                font-family: SoinSansPro-Medium;
+                color: #15a3d7;
+                font-size: 45px;
+                margin-top: 8px;
+                text-align: center;
+            }
+            #footer {
+                position: relative;
+                margin-top: -130px;
+                height: 130px;
+                clear:both;
+                width: 320px;
+                background-color: #393E44;
+            }
+            .anim_face {
+                height: 48px;
+                width: 48px;
+                float: left;
+                margin-right: 24px;
+                background-color: #B6B7B9
+            }
+            #anim_face1 {
+                margin-left: 28px;
+                -webkit-animation: changefacecolor 30s;
+                -webkit-animation-delay: 0s;
+                -webkit-animation-fill-mode: forwards;
+            }
+            #anim_face2 {
+                -webkit-animation: changefacecolor 30s;
+                -webkit-animation-delay: 30s;
+                -webkit-animation-fill-mode: forwards;
+            }
+            #anim_face3 {
+                -webkit-animation: changefacecolor 30s;
+                -webkit-animation-delay: 60s;
+                -webkit-animation-fill-mode: forwards;
+            }
+            #anim_face4 {
+                margin-right: 0px;
+                -webkit-animation: changefacecolor 30s;
+                -webkit-animation-delay: 90s;
+                -webkit-animation-fill-mode: forwards;
+            }
+            #anim_circle {
+                position: absolute; 
+                background-color: #ED6748;
+                border: 2px solid #393E44;
+                border-radius: 8px;
+                height: 8px;
+                width: 8px;
+                top: 55px;
+            }
+            #anim_box {
+                position: absolute; 
+                left: 12px;
+                top: 60px;
+                width: 296px;
+                height: 2px;
+                background-color: #ED6748;
+            }
+            #attemptlabel {
+                color: white;
+                text-align: center;
+                font-size: 18px;
+                padding-top: 72px;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            @-webkit-keyframes changefacecolor {
+                0% {background-color:#B6B7B9;}
+                2% {background-color:#00A6D8;}
+                83% {background-color:#00A6D8;}
+                85% {background-color:#586168;}
+                100% {background-color:#586168;}
+            }
+        </style>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+        <script src="js/tween.min.js"></script>
+        <script src="js/RequestAnimationFrame.js"></script>
+        <script>
+            function updateAttempt(i) {
+                $("#attemptlabel").text("Attempting Friend #" + i);
+                $('#attemptlabel').fadeIn(400);
+                setTimeout(function() { $('#attemptlabel').fadeOut(400); }, 25000);
+            }
+
+            function updateAttemptNoAnswer() {
+                $("#attemptlabel").text("No Answer");
+                $('#attemptlabel').fadeIn(400);
+                setTimeout(function() { $('#attemptlabel').fadeOut(400); }, 4000);
+            }
+
+            function init_circle() {
+
+                var anim_circle = document.getElementById('anim_circle');
+                var elem1 = { x: 6, domElement: anim_circle };
+
+                var updateCallback = function() {
+                    this.domElement.style.left = this.x + 'px';
+                }
+
+                var tween = new TWEEN.Tween(elem1)
+                    .to({ x: 304 }, 3000)
+                    .onUpdate(updateCallback)
+                    .easing(TWEEN.Easing.Sinusoidal.InOut)
+                    .start();
+
+                var tweenBack = new TWEEN.Tween(elem1, false)
+                    .to({ x: 6}, 3000)
+                    .onUpdate(updateCallback)
+                    .easing(TWEEN.Easing.Sinusoidal.InOut);
+
+                tween.chain(tweenBack);
+                tweenBack.chain(tween);
+
+                var label = document.getElementById('attemptlabel');
+
+                for (var i = 0; i < 4; i++) {
+                    setTimeout(updateAttempt, 30000 * i, i + 1);
+                    setTimeout(updateAttemptNoAnswer, (30000 * i) + 25600);
+                }
+            }
+
+            function animate_circle() {
+                requestAnimationFrame( animate_circle );
+                TWEEN.update();
+            }
+
+            function getUserID() {
+                var qs = (function(a) {
+                    if (a == "") return {};
+                    var b = {};
+                    for (var i = 0; i < a.length; ++i) {
+                        var p=a[i].split('=');
+                        if (p.length != 2) continue;
+                        b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+                    }
+                    return b;
+                })(window.location.search.substr(1).split('&'));
+                return qs["id"];
+            }
+
+            function shuffle(array) {
+                var counter = array.length, temp, index;
+                while (counter--) {
+                    index = (Math.random() * counter) | 0;
+                    temp = array[counter];
+                    array[counter] = array[index];
+                    array[index] = temp;
+                }
+                return array;
+            }
+
+            function drawHold(data) {
+                var imagestring = "assets/"+data.imagename+"@2x.png";
+                $('#image').css("background-image", "url("+imagestring+")");  
+                $("#textlabel").html(data.text);
+                $("#datalabel").text(data.datastring);
+                $('#fadingview').fadeIn(400);
+                setTimeout(function() { $('#fadingview').fadeOut(400); }, 23400);
+            }
+            
+            function populateView(data) {
+                var userNumber = data["userNumber"].toString();
+                var totalUsers = data["totalUsers"].toString();
+                var totalCalls = data["attemptedCalls"].toString();
+
+                var userSinceDate = new Date(data["userSince"]);
+                var curr_date = userSinceDate.getDate();
+                var curr_month = userSinceDate.getMonth() + 1; //Months are zero based
+                var curr_year = userSinceDate.getFullYear();
+                var userSince = curr_month + "/" + curr_date + "/" + curr_year;
+
+                var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+                var todayDate = new Date();
+                var lastCompletedCallDate = new Date(data["lastCompletedCall"]);
+                var daysSinceLastCallNum = Math.round(Math.abs((todayDate.getTime() - lastCompletedCallDate.getTime())/(oneDay)));
+                var daysSinceLastCall = "";
+                if (daysSinceLastCallNum == 0) {
+                    daysSinceLastCall = "TODAY";
+                }
+                else if (daysSinceLastCallNum == 1) {
+                    daysSinceLastCall = daysSinceLastCallNum + " DAY";
+                }
+                else {
+                    daysSinceLastCall = daysSinceLastCallNum + " DAYS";
+                }
+                
+                var pageData0 = {"imagename": "calendarcircle", "text": "YOU JOINED<br>WAI ON", "datastring": userSince};
+                var pageData1 = {"imagename": "number", "text": "YOU ARE<br>NUMBER", "datastring": userNumber};
+                var pageData2 = {"imagename": "face", "text": "TOTAL WAI<br>USERS", "datastring": totalUsers};
+                var pageData3 = {"imagename": "clock", "text": "TIME SINCE<br>YOUR LAST CALL", "datastring": daysSinceLastCall};
+                var pageData4 = {"imagename": "phone", "text": "YOUR TOTAL<br>WAI CALLS", "datastring": totalCalls};
+                
+                var unshuffledData = [pageData0, pageData1, pageData2, pageData3, pageData4];
+                var shuffledData = shuffle(unshuffledData);
+
+                for (var i = 0; i < shuffledData.length; i++) {
+                    var t = setTimeout(drawHold, 24000 * i, shuffledData[i]);
+                }
+            }
+
+            function updateView() {
+                var testing = true;
+                if (testing === true) {
+                    var data = {
+                        "userSince" : 1381947685918,
+                        "userNumber" : 1,
+                        "totalUsers" : 18,
+                        "attemptedCalls" : 1,
+                        "lastAttemptedCall" : 1381947686420,
+                        "completedCalls" : 1,
+                        "lastCompletedCall" : 1381947686420
+                    }
+                    populateView(data);
+                }
+                
+                else {
+                    var userID = getUserID();
+                    var getstring = '/rest/user/' + userID + '/hold/stats';
+                    $.getJSON(getstring, function(data) {
+                    }).done(function(data, textStatus, jqXHR) {
+                        populateView(data);
+                    });
+                }
+            }
+
+            $(document).ready(function() {
+                $("#fadingview").fadeOut(0);
+                $('#attemptlabel').fadeOut(0);
+                init_circle();
+                animate_circle();
+                updateView();
+            });
+
+        </script>
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="main">
+                <div id="headerdiv">Please wait while we connect you...</div>
+                <div id="fadingcontainerview">
+                    <div id="fadingview">
+                        <div id="image"></div>
+                        <div id="textlabel"></div>
+                        <div id="datalabel"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer">
+            <div id="anim_face1" class="anim_face"></div>
+            <div id="anim_face2" class="anim_face"></div>
+            <div id="anim_face3" class="anim_face"></div>
+            <div id="anim_face4" class="anim_face"></div>
+            <div id="anim_box"></div>
+            <div id="anim_circle"></div>
+            <div id="attemptlabel">lol</div>
+        </div>
+    </body>
+</html>
