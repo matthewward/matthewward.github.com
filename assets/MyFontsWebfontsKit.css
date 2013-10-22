@@ -1,0 +1,39 @@
+/* @license
+ * MyFonts Webfont Build ID 2631978, 2013-08-28T12:17:48-0400
+ * 
+ * The fonts listed in this notice are subject to the End User License
+ * Agreement(s) entered into by the website owner. All other parties are 
+ * explicitly restricted from using the Licensed Webfonts(s).
+ * 
+ * You may obtain a valid license at the URLs below.
+ * 
+ * Webfont: Soin Sans Pro Roman by Stawix
+ * URL: http://www.myfonts.com/fonts/stawix/soin-sans-pro/roman/
+ * 
+ * Webfont: Soin Sans Pro Light by Stawix
+ * URL: http://www.myfonts.com/fonts/stawix/soin-sans-pro/light/
+ * 
+ * Webfont: Soin Sans Pro Medium by Stawix
+ * URL: http://www.myfonts.com/fonts/stawix/soin-sans-pro/medium/
+ * 
+ * 
+ * License: http://www.myfonts.com/viewlicense?type=web&buildid=2631978
+ * Licensed pageviews: 20,000
+ * Webfonts copyright: Copyright &#x00A9; 2013 by Stawix Ruecha. All rights reserved.
+ * 
+ * © 2013 MyFonts Inc
+*/
+
+
+/* @import must be at top of file, otherwise CSS will not work */
+@import url("//hello.myfonts.net/count/28292a");
+
+  
+@font-face {font-family: 'SoinSansPro-Roman';src: url('webfonts/28292A_0_0.eot');src: url('webfonts/28292A_0_0.eot?#iefix') format('embedded-opentype'),url('webfonts/28292A_0_0.woff') format('woff'),url('webfonts/28292A_0_0.ttf') format('truetype');}
+ 
+  
+@font-face {font-family: 'SoinSansPro-Light';src: url('webfonts/28292A_1_0.eot');src: url('webfonts/28292A_1_0.eot?#iefix') format('embedded-opentype'),url('webfonts/28292A_1_0.woff') format('woff'),url('webfonts/28292A_1_0.ttf') format('truetype');}
+ 
+  
+@font-face {font-family: 'SoinSansPro-Medium';src: url('webfonts/28292A_2_0.eot');src: url('webfonts/28292A_2_0.eot?#iefix') format('embedded-opentype'),url('webfonts/28292A_2_0.woff') format('woff'),url('webfonts/28292A_2_0.ttf') format('truetype');}
+ 
