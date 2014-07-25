@@ -13,7 +13,7 @@
     function openTozOrAppStore() {
       var now = new Date().valueOf();
       setTimeout(function () {
-      if (new Date().valueOf() - now > 100) return;
+      if (new Date().valueOf() - now > 50) return;
         window.location = "https://itunes.apple.com/us/app/tozny/id855365899?mt=8";
       }, 25);
       window.location = "tozauth://api.tozny.com/?c=5186efcd05&r=sid_52fa6d0a3a290&s=718e9026a8e39978a293429d3158f3ae98990941aa8c456227357d41fb64176f&t=1406321799";
@@ -22,7 +22,7 @@
       var now = new Date().valueOf();
       setTimeout(function () {
       if (new Date().valueOf() - now > 100) return;
-        window.location = "http://google.com";
+        window.location = window.loca;
       }, 25);
       window.location = "tozauth://api.tozny.com/?c=5186efcd05&r=sid_52fa6d0a3a290&s=718e9026a8e39978a293429d3158f3ae98990941aa8c456227357d41fb64176f&t=1406321799";
     }
@@ -30,11 +30,7 @@
       var now = new Date().valueOf();
       setTimeout(function () {
       if (new Date().valueOf() - now > 100) return;
-        mNewObj = document.createElement('div');
-        mNewObj.style.backgroundColor="red";
-        mNewObj.style.visibility="show";
-        mNewObj.innerHTML = "You clicked me!";
-        document.getElementsByTagName("body")[0].appendChild(mNewObj);
+        window.location = window.location;
       }, 25);
       window.location = "tozauth://api.tozny.com/?c=5186efcd05&r=sid_52fa6d0a3a290&s=718e9026a8e39978a293429d3158f3ae98990941aa8c456227357d41fb64176f&t=1406321799";
     }
